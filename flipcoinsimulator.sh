@@ -13,7 +13,7 @@ flip_coin() {
     fi
 }
 
-while (( heads_count < 21 && tails_count < 21 )); do
+while (( (heads_count - tails_count < 2) && (tails_count - heads_count < 2) )); do
     result=$(flip_coin)
 
     if [[ $result == "Heads" ]]; then
@@ -28,10 +28,30 @@ echo "Heads count: $heads_count"
 echo "Tails count: $tails_count"
 
 if (( heads_count > tails_count )); then
-    echo "Heads won by $((heads_count - tails_count)) times."
+    echo "Heads won by $((heads_count - tails_count)) points."
 elif (( tails_count > heads_count )); then
-    echo "Tails won by $((tails_count - heads_count)) times."
+    echo "Tails won by $((tails_count - heads_count)) points."
 else
-    echo "It's a tie!"
+    echo "It's a tie! Continuing until a difference of 2 points is achieved."
+
+    while (( (heads_count - tails_count < 2) && (tails_count - heads_count < 2) )); do
+        result=$(flip_coin)
+
+        if [[ $result == "Heads" ]]; then
+            heads_count+=1
+        else
+            tails_count+=1
+        fi
+    done
+
+    echo "Final Result after the tie-breaker:"
+    echo "Heads count: $heads_count"
+    echo "Tails count: $tails_count"
+
+    if (( heads_count > tails_count )); then
+        echo "Heads won by $((heads_count - tails_count)) points."
+    else
+        echo "Tails won by $((tails_count - heads_count)) points."
+    fi
 fi
 
