@@ -8,20 +8,30 @@ flip_coin() {
 
     if ((result == 0)); then
         echo "Heads"
-        heads_count+=1
     else
         echo "Tails"
-        tails_count+=1
     fi
 }
 
-read -p "Enter the number of times to flip the coin: " num_flips
-
-for ((i=1; i<=num_flips; i++)); do
+while (( heads_count < 21 && tails_count < 21 )); do
     result=$(flip_coin)
-    echo "Flip $i: $result"
+
+    if [[ $result == "Heads" ]]; then
+        heads_count+=1
+    else
+        tails_count+=1
+    fi
 done
 
+echo "Final Result:"
 echo "Heads count: $heads_count"
 echo "Tails count: $tails_count"
+
+if (( heads_count > tails_count )); then
+    echo "Heads won by $((heads_count - tails_count)) times."
+elif (( tails_count > heads_count )); then
+    echo "Tails won by $((tails_count - heads_count)) times."
+else
+    echo "It's a tie!"
+fi
 
